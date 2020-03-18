@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.OrderDetail;
 import com.example.demo.model.Product;
 import com.example.demo.repository.OrderDetailRepository;
+import com.example.demo.to.OrderDetailTo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,13 @@ public class OrderDetailService {
     }
 
     @Transactional
-    public OrderDetail add(OrderDetail detail) {
-        Product product = em.find(Product.class, detail.getProductId());
+    public OrderDetail add(int orderId, OrderDetailTo detailTo) {
+        Product product = em.find(Product.class, detailTo.getProductId());
+        OrderDetail detail = new OrderDetail();
+        detail.setProductId(product.getId());
+        detail.setOrderId(orderId);
         detail.setPrice(product.getPrice());
-        detail.setAmount(detail.getPrice() * detail.getQuantity());
+        detail.setAmount(detail.getPrice() * detailTo.getQuantity());
         return repository.save(detail);
     }
 }

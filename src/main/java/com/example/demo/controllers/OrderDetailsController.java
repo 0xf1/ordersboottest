@@ -1,14 +1,12 @@
 package com.example.demo.controllers;
 
-import com.example.demo.model.Order;
 import com.example.demo.model.OrderDetail;
 import com.example.demo.service.OrderDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
+import com.example.demo.to.OrderDetailTo;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/order_details")
@@ -21,13 +19,7 @@ public class OrderDetailsController {
     }
 
     @PostMapping(value = "/{orderId}", consumes = "application/json")
-    public OrderDetail add(@PathVariable int orderId,@RequestBody String body) {
-        JsonParser parser = JsonParserFactory.getJsonParser();
-        Map<String, Object> map = parser.parseMap(body);
-        OrderDetail detail = new OrderDetail();
-        detail.setOrderId(orderId);
-        detail.setProductId(Integer.parseInt((String)map.get("product_id")));
-        detail.setQuantity(Double.parseDouble((String)map.get("quantity")));
-        return service.add(detail);
+    public OrderDetail add2(@PathVariable int orderId, @Validated @Valid @RequestBody OrderDetailTo orderDetailTo) {
+        return service.add(orderId, orderDetailTo);
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Order;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.to.OrderTo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +29,9 @@ public class OrderService {
     }
 
     @Transactional
-    public Order create(int customerId) {
+    public Order create(OrderTo orderTo) {
         Order order = new Order();
-        order.setCustomer(em.find(Customer.class, customerId));
+        order.setCustomer(em.find(Customer.class, orderTo.getCustomerId()));
         return repository.save(order);
     }
 }
